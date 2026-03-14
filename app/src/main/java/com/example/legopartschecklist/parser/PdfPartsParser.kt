@@ -1,4 +1,4 @@
-package com.example.legopartschecklist.parser
+qpackage com.example.legopartschecklist.parse
 
 import android.content.Context
 import android.net.Uri
@@ -47,7 +47,7 @@ class PdfPartsParser(private val context: Context) {
                 .filter { it.isNotBlank() }
                 .filterNot { it.contains("LEGO.com/service", ignoreCase = true) }
                 .filterNot { it.contains("trademarks of the LEGO Group", ignoreCase = true) }
-                .filterNot { it.matches(Regex("^\d{6,8}$")) && it == linesLastModelNumber(rawText) }
+                .filterNot { it.matches(Regex("^\\d{6,8}$")) && it == linesLastModelNumber(rawText) }
 
             var pendingQty: Int? = null
             for (line in lines) {
@@ -95,3 +95,4 @@ class PdfPartsParser(private val context: Context) {
         return rawText.lines().map { it.trim() }.lastOrNull { it.matches(Regex("^\d{7}$")) }
     }
 }
+b
