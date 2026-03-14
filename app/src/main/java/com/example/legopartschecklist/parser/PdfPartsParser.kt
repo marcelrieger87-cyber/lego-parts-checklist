@@ -1,4 +1,4 @@
-qpackage com.example.legopartschecklist.parse
+package com.example.legopartschecklist.parser
 
 import android.content.Context
 import android.net.Uri
@@ -50,6 +50,7 @@ class PdfPartsParser(private val context: Context) {
                 .filterNot { it.matches(Regex("^\\d{6,8}$")) && it == linesLastModelNumber(rawText) }
 
             var pendingQty: Int? = null
+
             for (line in lines) {
                 val qtyMatch = Regex("^(\\d{1,3})[xX×]$").matchEntire(line)
                 if (qtyMatch != null) {
@@ -75,7 +76,7 @@ class PdfPartsParser(private val context: Context) {
                     items += PartItem(
                         partNumber = line,
                         name = "",
-                        required = pendingQty ?: 0,
+                        required = pendingQty,
                         sourcePage = pageNumber,
                         sourceOrder = order++,
                         thumbnailNote = "Bildausschnitt aus Inventarseite vorbereiten"
@@ -92,7 +93,9 @@ class PdfPartsParser(private val context: Context) {
     }
 
     private fun linesLastModelNumber(rawText: String): String? {
-        return rawText.lines().map { it.trim() }.lastOrNull { it.matches(Regex("^\d{7}$")) }
+        return rawText
+            .lines()
+            .map { it.trim() }
+            .lastOrNull { it.matches(Regex("^\\d{7}$")) }
     }
 }
-b
