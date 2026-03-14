@@ -2,33 +2,31 @@ name: Android APK Build
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: 21
+
+      - name: Install Gradle
+        run: sudo apt update && sudo apt install -y gradle
 
       - name: Build APK
-  run: |
-    sudo apt update
-    sudo apt install -y gradle
-    gradle assembleDebug
+        run: gradle assembleDebug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
-
-
-
-
